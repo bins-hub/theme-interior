@@ -124,3 +124,28 @@ assets/favicon.svg    기본 임시 아이콘
 - 이전 상업공간 페이지에서 시안 이미지는 제외했습니다. **주거공간 영역은 실제 시공 사진이 전달되기 전까지 기존 참고 이미지 상태를 유지**합니다.
 - 제공된 사진만을 근거로 사용하여 현장 위치·평수·공사비·고객 후기 등 확인되지 않은 사실은 추가하지 않았습니다.
 - 변경 전 복구 브랜치: `backup/before-commercial-photos-20261024`.
+
+## 주거공간 포트폴리오 10장 추가 (2026-10-24)
+
+올려주신 최신 사진 10장은 **전부 주거공간**이며 상업공간 사진과 구분합니다.
+
+- **미사 단독주택 — 3장**
+  - `assets/images/residential/misa-dining.webp`: 주방·다이닝
+  - `assets/images/residential/misa-bath.webp`: 욕실
+  - `assets/images/residential/misa-hall.webp`: 복도·수납
+- **덕풍동 제일풍경채 리모델링 — 7장**
+  - `assets/images/residential/deokpung-open-space.webp`: 오픈형 주방·생활공간
+  - `assets/images/residential/deokpung-kitchen-overview.webp`: 주방 전체
+  - `assets/images/residential/deokpung-kitchen-front.webp`: 주방 정면
+  - `assets/images/residential/deokpung-kitchen-side.webp`: 주방 측면
+  - `assets/images/residential/deokpung-room.webp`: 생활공간
+  - `assets/images/residential/deokpung-dressing.webp`: 수납·복도
+  - `assets/images/residential/deokpung-living.webp`: 거실·마감
+
+이미지는 사용자가 제공한 원본을 바탕으로 이전 대화에서 제작된 **로고·워터마크 제거 편집본**을 웹 최적화한 것임. 원본 이미지와 동일한 픽셀·세부 마감 재현을 보장하지 않으며, 보정본을 사용하는 점은 홈페이지에 명시했습니다. 수정 전 사진을 그대로 재현해야 하는 기술적 도면/상세 시공자료로 쓰지 않습니다.
+
+- `index.html`: 기존 참고 사진 4장 목록을 두 프로젝트의 대표 사진 카드로 교체, 영문 브랜드 TheMe 유지.
+- `apartment-remodeling.html`: 두 프로젝트별 대표 이미지 + 짧은 가로 사진 레일로 구성. 업로드 피드처럼 세로로 길게 늘어지는 구조 제거.
+- `assets/residential-gallery.js`: 사진 확대, 프로젝트 내부 이전/다음 이동, X 닫기 시 현재 스크롤 복원.
+- `commercial-interior.html`: 원래 상업공간 5장 유지. 모바일에서 긴 세로 목록 대신 가로 스와이프.
+- **복구점:** `backup/before-residential-portfolio-20261024`
