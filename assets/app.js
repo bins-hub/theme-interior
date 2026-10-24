@@ -32,6 +32,24 @@
   document.querySelectorAll('[data-theme-directions-link]').forEach(a => {
     if (company.directionsUrl) a.href = company.directionsUrl;
   });
+  // TMAP은 모바일 앱 전용 스킴입니다. 설치된 기기에서만 열리고,
+  // 미설치/PC에서는 하단 앱 설치 링크 및 주소 복사 버튼으로 안내합니다.
+  const tmapStore = /iPhone|iPad|iPod/i.test(navigator.userAgent)
+    ? company.iosTmapStoreUrl : company.tmapStoreUrl;
+  document.querySelectorAll('[data-theme-tmap-store]').forEach(a => {
+    if (tmapStore) a.href = tmapStore;
+  });
+  document.querySelectorAll('[data-copy-office-address]').forEach(button => {
+    button.addEventListener('click', async () => {
+      const addr = String(company.address || '경기 하남시 덕풍북로251번길 36 1층');
+      try {
+        await navigator.clipboard.writeText(addr);
+        button.textContent = '주소 복사 완료 ✓';
+      } catch {
+        button.textContent = '복사 불가 · ' + addr;
+      }
+    });
+  });
   document.querySelectorAll('[data-theme-address]').forEach(el => {
     if (company.address) el.textContent = company.address;
   });
