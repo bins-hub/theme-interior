@@ -212,16 +212,20 @@
       return;
     }
 
+    // FormSubmit는 제출 JSON의 속성명을 그대로 메일 표의 항목명으로 사용합니다.
+    // 기술용 _subject / _template / _honey / _url 키는 공급자 예약 필드여서 유지합니다.
     const payload = {
-      name: field('form-name'),
-      phone: field('form-phone'),
-      consultation_type: field('form-type'),
-      location: field('form-location') || '미정',
-      space_size: field('form-size') || '미정',
-      commercial_category: formType.value === '상업공간 인테리어' ? valueOrUnknown('form-commercial') : '해당 없음',
-      schedule: field('form-when') || '미정',
-      budget: field('form-budget') || '미정',
-      message: field('form-notes') || '별도 문의 내용 없음',
+      '고객 성함': field('form-name'),
+      '연락처': field('form-phone'),
+      '상담 분야': field('form-type'),
+      '공사 예정 위치': field('form-location') || '미정',
+      '면적·평형': field('form-size') || '미정',
+      ...(formType.value === '상업공간 인테리어'
+        ? { '상업공간 유형': valueOrUnknown('form-commercial') } : {}),
+      '희망 공사 시기': field('form-when') || '미정',
+      '예상 예산': field('form-budget') || '미정',
+      '상담 상세 내용': field('form-notes') || '별도 문의 내용 없음',
+      '개인정보 수집·이용 동의': document.getElementById('form-consent').checked ? '동의' : '미동의',
       _subject: formatSubject(),
       _template: 'table',
       _honey: '',
