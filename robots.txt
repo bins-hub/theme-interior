@@ -1,0 +1,5 @@
+# 참고: github.io 프로젝트 하위 경로의 robots.txt는 검색 로봇이 기본적으로 읽는 호스트 루트 파일이 아닙니다.
+# 독립 도메인 연결 후 이 파일을 해당 도메인의 웹 루트에 배치하세요.
+User-agent: *
+Allow: /
+Sitemap: https://bins-hub.github.io/theme-interior/sitemap.xml
