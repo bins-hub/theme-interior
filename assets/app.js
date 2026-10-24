@@ -12,6 +12,28 @@
   const inquiryResult = document.getElementById('inquiry-result');
   const inquiryOutput = document.getElementById('inquiry-output');
   const liveFeedback = document.getElementById('copy-feedback');
+  // Contact data is managed in one place: assets/site-config.js
+  const company = window.THEME_SITE_CONFIG || {};
+  const inquiryEmail = String(company.inquiryEmail || '').trim();
+  document.querySelectorAll('[data-theme-email-link]').forEach(a => {
+    if (inquiryEmail) a.href = 'mailto:' + inquiryEmail;
+  });
+  document.querySelectorAll('[data-theme-phone-link]').forEach(a => {
+    if (company.phoneDial) a.href = 'tel:' + company.phoneDial;
+    if (company.phoneDisplay) a.textContent = a.closest('.footer')
+      ? '전화 · ' + company.phoneDisplay
+      : '전화 상담 · ' + company.phoneDisplay + ' ↗';
+  });
+  document.querySelectorAll('[data-theme-blog-link]').forEach(a => {
+    if (company.blogUrl) a.href = company.blogUrl;
+  });
+  document.querySelectorAll('[data-theme-map-link]').forEach(a => {
+    if (company.mapUrl) a.href = company.mapUrl;
+  });
+  document.querySelectorAll('[data-theme-address]').forEach(el => {
+    if (company.address) el.textContent = company.address;
+  });
+
 
   const setScrolled = () => header.classList.toggle('scrolled', window.scrollY > 35);
   window.addEventListener('scroll', setScrolled, { passive: true });
@@ -88,47 +110,68 @@
   document.querySelectorAll('[data-close-space]').forEach(btn => btn.addEventListener('click', () => spaceDialog.close()));
 
   const field = (id) => document.getElementById(id).value.trim() || '미정';
+  let preparedEmail = '';
   inquiryForm.addEventListener('submit', e => {
     e.preventDefault();
+    if (!inquiryForm.reportValidity()) return;
+    if (!inquiryEmail) {
+      window.alert('상담 이메일이 아직 설정되지 않았습니다. 전화 상담을 이용해주세요.');
+      return;
+    }
     inquiryOutput.textContent = [
-      '[더미인테리어 TheMe | 아파트 전체 리모델링 상담 준비]',
+      '[디자인더미 TheMe | 아파트 전체 리모델링 상담]',
       '',
-      `아파트 위치: ${field('form-location')}`,
-      `평형: ${field('form-size')}`,
-      `희망 공사 시기: ${field('form-when')}`,
-      `예상 예산: ${field('form-budget')}`,
-      `상담하고 싶은 내용: ${field('form-notes')}`,
+      '성함: ' + field('form-name'),
+      '연락처: ' + field('form-phone'),
+      '아파트 위치: ' + field('form-location'),
+      '평형: ' + field('form-size'),
+      '희망 공사 시기: ' + field('form-when'),
+      '예상 예산: ' + field('form-budget'),
+      '상담하고 싶은 내용: ' + field('form-notes'),
       '',
-      '※ 위 내용은 상담용 초안이며 현재 자동으로 전송되지 않았습니다.'
+      '※ 이 화면만으로는 상담이 접수되지 않습니다. 메일 앱에서 보내기를 눌러주세요.'
     ].join('\n');
+    const subject = '[디자인더미 TheMe] 아파트 리모델링 상담 - ' + field('form-name');
+    preparedEmail = 'mailto:' + encodeURIComponent(inquiryEmail)
+      + '?subject=' + encodeURIComponent(subject)
+      + '&body=' + encodeURIComponent(inquiryOutput.textContent);
     inquiryForm.hidden = true;
     inquiryResult.hidden = false;
-    liveFeedback.textContent = '';
-    document.getElementById('copy-inquiry').focus();
+    liveFeedback.textContent = '상담 메일 초안이 준비됐습니다. 메일 앱에서 직접 전송해주세요.';
+    document.getElementById('send-inquiry').focus();
   });
+
+  document.getElementById('send-inquiry').addEventListener('click', () => {
+    if (!preparedEmail) return;
+    liveFeedback.textContent = '메일 앱을 열고, 전송 버튼을 눌러주세요. 홈페이지에서 자동 접수되지 않습니다.';
+    window.location.href = preparedEmail;
+  });
+
   document.getElementById('edit-inquiry').addEventListener('click', () => {
     inquiryForm.hidden = false;
     inquiryResult.hidden = true;
     document.getElementById('form-location').focus();
   });
+
   document.getElementById('copy-inquiry').addEventListener('click', async () => {
     const data = inquiryOutput.textContent;
     try {
       if (navigator.clipboard && window.isSecureContext) {
         await navigator.clipboard.writeText(data);
       } else {
-        const field = document.createElement('textarea');
-        field.value = data;
-        field.style.position = 'fixed';
-        field.style.opacity = '0';
-        document.body.appendChild(field);
-        field.select();
-        if (!document.execCommand('copy')) throw new Error('copy unsupported');
-        field.remove();
+        const temp = document.createElement('textarea');
+        temp.value = data;
+        temp.style.position = 'fixed';
+        temp.style.opacity = '0';
+        document.body.appendChild(temp);
+        temp.select();
+        const copied = document.execCommand('copy');
+        temp.remove();
+        if (!copied) throw new Error('copy unavailable');
       }
-      liveFeedback.textContent = '상담 내용이 복사되었습니다. 원하는 상담 채널에 붙여넣으세요.';
+      liveFeedback.textContent = '내용을 복사했습니다. 이메일에 붙여넣어 직접 보내주세요.';
     } catch {
-      liveFeedback.textContent = '자동 복사가 지원되지 않습니다. 위 내용을 길게 눌러 직접 복사해주세요.';
+      liveFeedback.textContent = '자동 복사를 사용할 수 없습니다. 내용을 길게 눌러 복사해주세요.';
     }
   });
 })();
