@@ -58,3 +58,13 @@ a{color:inherit;text-decoration:none}a:hover{text-decoration:underline}img{max-w
 .lightbox-footer button{min-width:36px;min-height:38px}
 }
 @media(prefers-reduced-motion:reduce){.commercial-shot-media img{transition:none}}
+
+/* Commercial gallery refinement: mobile horizontal collection instead of very tall image grid */
+.commercial-shot-media img{aspect-ratio:16/10;object-position:center 64%}
+.commercial-shot-caption{min-height:77px}
+@media(max-width:750px){
+ .commercial-gallery{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;overscroll-behavior-inline:contain;scrollbar-width:thin;gap:12px;padding-bottom:12px}
+ .commercial-shot{flex:0 0 min(75vw,390px);scroll-snap-align:start}
+ .commercial-shot-media img{width:100%;height:auto;aspect-ratio:16/10;object-fit:cover;object-position:center 65%}
+ .commercial-shot-caption{min-height:70px}
+}
