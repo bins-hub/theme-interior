@@ -1,151 +1,57 @@
-# 디자인더미 TheMe — 아파트 전체 리모델링 홈페이지
+# 디자인더미 TheMe | 공식 홈페이지
 
-정적 HTML/CSS/JavaScript 기반의 반응형 홈페이지 1차 제작본입니다. **실제 시공 사진을 아직 전달받지 않은 상태**에 맞춰, 허위 시공 실적이나 후기 없이 설계했습니다.
+**공개 사이트:** https://bins-hub.github.io/theme-interior/  
+**저장소:** https://github.com/bins-hub/theme-interior
 
-## 실행
+경기도 하남의 **디자인더미(TheMe)** 인테리어 홈페이지. 아파트 전체 리모델링과 상업공간 인테리어를 소개하고 온라인 상담을 접수하는 정적 HTML/CSS/JavaScript 사이트입니다.
 
-- `index.html` 파일을 브라우저에서 열면 됩니다.
-- GitHub Pages는 저장소 Settings → Pages → Deploy from a branch → main / (root)로 배포합니다.
-- 다른 서버나 빌드 도구, API 키가 필요하지 않습니다.
+## 공개 페이지
 
-## 시공 사진 교체 방법 (중요)
+| 페이지 | 역할 |
+|---|---|
+| `index.html` | 메인 소개, 주거공간·상업공간 연결, 상담 양식, 연락처 |
+| `apartment-remodeling.html` | 미사 단독주택(3장), 덕풍동 제일풍경채(7장) 포트폴리오 |
+| `commercial-interior.html` | 상업공간 사진 5장 포트폴리오 |
+| `sitemap.xml` | 공개 페이지 3개의 사이트맵 |
+| `assets/images/residential/` | 주거공간 프로젝트 이미지 |
+| `assets/images/commercial/` | 상업공간 프로젝트 이미지 |
 
-1. `assets/images/`의 예시 이미지를 아래 동일한 파일명의 실제 시공 사진으로 교체합니다. JPG 형식 권장. 세로·가로 비율이 조금 달라도 자동 크롭됩니다.
+사진 원본과 편집본 사용 권한, 프로젝트 표기 권한은 운영자가 관리·확인합니다. 설명에는 확인된 사실만 사용하고 실제 후기, 공사비, 공사 기간이나 자격을 임의로 기재하지 않습니다.
 
-| 사진 경로 | 사용 위치 | 권장 해상도 |
-|---|---|---|
-| `assets/images/hero.jpg` | 첫 화면 메인 이미지 | 2200×1300px 이상 |
-| `assets/images/intro.jpg` | 브랜드 소개 | 1200×1400px 이상 |
-| `assets/images/living.jpg` | 거실 디자인 | 1000×850px 이상 |
-| `assets/images/kitchen.jpg` | 주방 디자인 | 1000×850px 이상 |
-| `assets/images/bedroom.jpg` | 침실 디자인 | 1000×850px 이상 |
-| `assets/images/hallway.jpg` | 현관 디자인 | 1000×850px 이상 |
-| `assets/images/contact.jpg` | 하단 상담 유도 배경 | 1800×1000px 이상 |
+## 운영 연락처
 
-2. 실제 사진으로 교체 후 `index.html`의 '시안용 참고 이미지', '참고 이미지', '실제 시공 사진으로 교체 예정' 안내를 실제 상황에 맞게 수정합니다.
-3. 실제 시공사례 데이터(아파트명 표기 동의, 평형, 시공 범위, 기간, 설명, 사진 권리 확인)를 받은 후 별도 'PORTFOLIO' 페이지로 확대하는 것을 권장합니다.
+- 상호: **디자인더미** (TheMe)
+- 전화: **031-792-4551**
+- 주소: **경기 하남시 덕풍북로251번길 36 1층**
+- 블로그: https://blog.naver.com/771jung
+- 현재 온라인 상담 수신 주소: `n3888171@gmail.com`
 
-GitHub Pages 패키지는 **자체 로컬 참고 이미지**만 사용합니다. 이미지들은 시안에서 추출한 예시 이미지이며 실제 디자인더미 시공 실적이 아닙니다.
+**연락처 변경:** `assets/site-config.js`의 `inquiryEmail`, `phoneDisplay`, `phoneDial`, `address`, `blogUrl`을 수정합니다. 티맵 길찾기 목적지 좌표도 동일한 설정 파일에서 관리합니다.
 
-## 검색 노출 설정
+## 상담 전송
 
-실제 시공사진·연락처 등이 아직 없는 **초안**이므로 `index.html`에 `<meta name="robots" content="noindex, nofollow">`가 들어 있고, `robots.txt`에서도 검색엔진 크롤링을 막아 두었습니다. 정식 공개 시 메타 robots를 제거하고 `robots.txt`를 `User-agent: *` + `Allow: /`로 바꿔야 검색 노출이 가능합니다.
+메인 페이지의 상담 폼은 `FormSubmit` AJAX 서비스(`https://formsubmit.co/ajax/`)를 이용해 현재 이메일 수신 주소로 데이터를 전송합니다. 주거공간과 상업공간 항목은 선택에 따라 달라집니다. 개인정보 수집·이용 고지 및 동의 체크를 필수로 유지합니다.
 
-## 상담 기능의 현재 상태
+- 이메일 주소 변경 시 새 수신함에서 FormSubmit 인증이 다시 필요할 수 있습니다.
+- API 응답 성공과 **실제 수신함 도착 확인은 다른 사항**입니다. 전송 오류 또는 인증 미완료일 때 고객에게 접수 완료를 표시하지 않습니다.
+- 메일 앱 직접 작성과 전화 상담도 대안으로 제공합니다.
+- 외부 접수 서비스 이용약관, 개인정보 처리·보유 기간, 국외 처리 여부 등의 최신 정책은 운영자가 정기적으로 확인해야 합니다.
 
-- 홈페이지의 '상담 준비하기' 버튼은 모달로 열립니다.
-- 고객이 입력한 지역·평형·희망 시기·예산·고민을 **브라우저 내부에서만 문장으로 조합**합니다.
-- '내용 복사' 버튼은 실제로 동작합니다.
-- **상담 폼은 서버로 전송되지 않습니다.** 회사의 실제 연락처, 카카오톡 채널, 이메일 또는 폼 수신 API를 받은 뒤 연결해야 합니다.
-- 전화번호/메일 주소/사업자등록번호/대표자명/주소/실제 후기/보증 정책 등 미확인 정보는 의도적으로 넣지 않았습니다.
+## 포트폴리오/길찾기
 
-## 사진 외에 이후 준비할 정보
+- 주거공간: 프로젝트별 사진 확대, 이전/다음, 팝업 종료 후 원래 스크롤 위치 복귀
+- 상업공간: 사진 5장, 모바일 가로 탐색, 사진 확대
+- 메인 갤러리와 상세페이지에서 **네이버 블로그 시공사례**로 이동
+- 티맵 길찾기는 모바일 앱 딥링크를 사용하므로 앱 미설치/일부 브라우저에서는 열리지 않을 수 있습니다. 주소 복사 및 티맵 설치 링크가 함께 제공됩니다. `site-config.js`의 목적지 좌표는 현장에서 정확한 입구 위치 확인을 권장합니다.
 
-- 공식 연락처 / 카카오톡 채널 / 이메일 / 회사 주소 / 사업자등록번호 / 대표자 및 상호정보(정확성 확인)
-- 실제 시공 전후 사진과 프로젝트별 평형·공사 범위·소요기간
-- 상호 로고 원본과 회사가 사용할 브랜드 컬러(있다면)
-- 견적과 현장 관리, A/S와 관련된 실제 시행 정책
-- 실서비스 운영 시 개인정보 수집·처리 및 보유 기간 안내, 필요한 법적 고지
+## 배포
 
-## 파일 구조
+GitHub 저장소 Settings → Pages → Deploy from a branch → **main / (root)**. `.nojekyll` 파일로 Jekyll 변환을 건너뛰며, main 변경 후 Pages 빌드·배포가 실행됩니다. 최신 HTML과 JS에는 캐시 구분자가 설정되어 있습니다.
 
-```
-index.html            단일 페이지 구성 및 카피
-assets/styles.css     컬러·폰트·레이아웃·모바일 디자인
-assets/app.js         메뉴·갤러리·상담 내용 생성/복사
-assets/images/        나중에 실제 사진으로 교체하는 폴더
-assets/favicon.svg    기본 임시 아이콘
-```
+SEO: 세 공개 페이지에 페이지별 `title`, `description`, `canonical`, 구조화 데이터가 있고 메인 페이지의 `robots`는 `index,follow`입니다. 사이트맵은 `/theme-interior/sitemap.xml`에 있습니다. 별도 도메인이 없는 GitHub 프로젝트 경로에서는 `robots.txt`가 호스트 루트의 공통 robots 규칙을 대체하지 않습니다. **검색 노출·검색엔진 소유 확인·색인 등록은 별도 검증 대상**입니다.
 
-## 디자인 의도
+## 보존 및 복구
 
-1. 강한 메인 후킹: "예쁜 집은 많습니다. 잘 만든 집은 다릅니다."
-2. 소구점: 디자인/이해하기 쉬운 견적/현장 관리/마감 완성도
-3. 신뢰: 실제 사례를 전달받기 전에는 레퍼런스라고 명확히 표시
-4. 전환: 메인 및 모바일 하단의 상담 유도, 상담 요약 생성 기능
+최종 공개용 문구 정리 전 브랜치: `backup/before-production-copy-audit-20261024`.
 
-*이 패키지는 배포 가능한 1차 정적 홈페이지이며, 문의 수신 기능과 실제 시공 포트폴리오는 후속 연결 항목입니다.*
-## 실사용 연락처 및 임시 이메일 상담
-
-- **상호:** 디자인더미 (영문 TheMe)
-- **사무실:** 경기 하남시 덕풍북로251번길 36 1층
-- **전화:** 031-792-4551
-- **공식 블로그:** https://blog.naver.com/771jung
-- **테스트 이메일:** `n3888171@gmail.com`
-
-위 연락처는 `assets/site-config.js`에서 한 곳만 수정하면 전화·메일·지도·블로그 링크에 적용됩니다. 상담 버튼은 작성된 내용을 **고객의 메일 앱 초안**으로 옮기며 자동 접수나 서버 저장 기능은 제공하지 않습니다. 수신 메일함에 도착한 경우에만 접수로 취급해야 합니다.
-
-변경 전 상태는 Git 브랜치 `backup/before-contact-20261024`로 보관했습니다. **사이트의 포트폴리오 이미지는 아직 참고용이며 실제 시공 사진이 아닙니다.** 사이트는 시안 단계에서 검색 인덱싱 방지를 유지합니다.
-
-## 2026-10-24 상담 및 지도 업데이트
-- 주력 분야: **아파트 전체 리모델링**, 추가 상담 분야: **상업공간 인테리어**(카페·매장·사무실 등).
-- 상담 화면: 상담 분야 전환, 성함·전화번호·공사 위치·면적·예산·문의내용, 개인정보 동의.
-- 임시 자동 접수: 외부 FormSubmit AJAX → 테스트 이메일 `n3888171@gmail.com`. **최초 접수 때 해당 메일함에서 FormSubmit 'Activate Form' 이메일을 승인해야 실수신 가능**. 성공/실패 상태를 사용자에게 표시하지만 이메일 전달 자체는 메일함 확인 필요.
-- 지도: `assets/site-config.js`의 `mapUrl`은 경기도 하남시 덕풍북로251번길 36(덕풍동 806-2)의 좌표(37.5487329, 127.2111985)를 기준으로 한 카카오맵 위치 표시. `directionsUrl`은 같은 좌표로 길찾기 설정. 건물 위치이며 1층/101호 위치는 현장 안내로 확인.
-- 고객의 브라우저 캐시로 구버전 상담창이 보이지 않도록 HTML에서 CSS/JS 파일 버전값을 갱신.
-- 구버전 안전 복구점: `backup/before-real-inquiry-20261024`, 더 오래된 복구점: `backup/before-contact-20261024`.
-
-## TMAP 전환 및 검색 최적화 (2026-10-24)
-
-### TMAP 길찾기
-- 카카오맵 대신 `assets/site-config.js`의 `tmap://route?goalname=…&goalx=…&goaly=…` 모바일 딥링크를 사용합니다.
-- 갤럭시/아이폰에 TMAP 앱이 설치되어 있어야 합니다. 일부 인앱 브라우저·PC에서는 외부 앱 링크가 열리지 않을 수 있으므로 **주소 복사** 및 **TMAP 설치** 링크를 함께 제공합니다.
-- 현재 목적지 좌표는 이전 사이트의 지도 설정값(127.2111985, 37.5487329)이며 **정확한 출입구·사무실 위치는 담당자가 현장에서 검증한 뒤 확정**해야 합니다.
-
-### 기본 SEO
-- `index.html`의 `noindex,nofollow` 제거 및 `robots=index,follow`.
-- `canonical`, OG 메타데이터, 타이틀/설명, `LocalBusiness` JSON-LD.
-- **실제로 공개된 별도 서비스 페이지** `apartment-remodeling.html` 및 `commercial-interior.html`에 서로 다른 제목·본문·Service JSON-LD 부여.
-- `sitemap.xml`: 메인 + 서비스 2개 페이지. 현재 공개 주소: `https://bins-hub.github.io/theme-interior/`.
-- `robots.txt`도 버전 관리 목적상 추가했지만 **GitHub Pages 프로젝트 경로 /theme-interior/의 robots.txt는 검색 로봇이 찾는 호스트 루트 /robots.txt가 아닙니다.** 별도 도메인 연결 시 새 도메인 루트로 이전 후 sitemap 경로 수정 필요.
-- 네이버 서치어드바이저는 보통 호스트 단위의 소유확인만 지원하므로, 전용 도메인 정한 후 등록하면 사이트별로 관리하기 편리합니다. 구글 Search Console URL-prefix 등록 및 사이트맵 제출도 진행하세요.
-- 모든 실제 시공 실적 이미지와 사례·리뷰는 검증 전까지 시안 이미지로 명시. 실제 사진 도착 후 이미지 alt·프로젝트별 본문·평형·지역·공정 설명 등을 업데이트합니다.
-- GEO(생성형 AI 검색): 검증 가능한 업체 정보, 질문/답, 정적 HTML에 읽히는 서비스 설명에 집중하며 AI 검색 노출이나 상위 노출을 보장하지 않습니다. Google 공식 가이드는 특별한 `llms.txt`가 필요하지 않다고 설명합니다.
-- 검색엔진 등록과 색인 여부 확인, 검색순위 검증은 아직 별도 수행되지 않았습니다.
-
-### 확인 자료
-- Google Search Central: LocalBusiness structured data / AI features and your website.
-- 네이버 서치어드바이저: robots.txt, 검색 노출 기본 가이드.
-
-### 복원
-- 변경 전 스냅샷 브랜치: `backup/pre-tmap-seo-20261024`. 기존 파일이나 이전 동작으로 복구할 수 있습니다.
-
-## 상업공간 포트폴리오 사진 적용 (2026-10-24)
-- 사용자가 직접 업로드한 사진 6장 중 `25252.jpg`와 `25240.jpg`가 해시까지 동일한 중복이므로 **5장만 사용**했습니다.
-- 업로드한 이미지의 내부 워터마크는 그대로 보존하며, 화질·웹 속도 조절만 적용했습니다.
-- 웹 최적화 이미지 파일:
-  - `assets/images/commercial/counter.webp` — 카운터와 쇼케이스 (`25252.jpg`)
-  - `assets/images/commercial/hall-day.webp` — 통창이 있는 홀 (`25249.jpg`)
-  - `assets/images/commercial/lighting.webp` — 펜던트 조명 (`25246.jpg`)
-  - `assets/images/commercial/hall-evening.webp` — 테이블과 실내 전경 (`25237.jpg`)
-  - `assets/images/commercial/rooftop.webp` — 테라스와 야경 (`25243.jpg`)
-- **메인 홈페이지:** 상업공간 섹션에서 3장 미리보기, 모바일 가로 스와이프, 전체 갤러리 링크.
-- **상업공간 페이지:** 실제 전달 사진 5장, 개별 확대 모달, 이전/다음 및 ESC 닫기, 닫으면 원래 스크롤 위치 복구.
-- 이전 상업공간 페이지에서 시안 이미지는 제외했습니다. **주거공간 영역은 실제 시공 사진이 전달되기 전까지 기존 참고 이미지 상태를 유지**합니다.
-- 제공된 사진만을 근거로 사용하여 현장 위치·평수·공사비·고객 후기 등 확인되지 않은 사실은 추가하지 않았습니다.
-- 변경 전 복구 브랜치: `backup/before-commercial-photos-20261024`.
-
-## 주거공간 포트폴리오 10장 추가 (2026-10-24)
-
-올려주신 최신 사진 10장은 **전부 주거공간**이며 상업공간 사진과 구분합니다.
-
-- **미사 단독주택 — 3장**
-  - `assets/images/residential/misa-dining.webp`: 주방·다이닝
-  - `assets/images/residential/misa-bath.webp`: 욕실
-  - `assets/images/residential/misa-hall.webp`: 복도·수납
-- **덕풍동 제일풍경채 리모델링 — 7장**
-  - `assets/images/residential/deokpung-open-space.webp`: 오픈형 주방·생활공간
-  - `assets/images/residential/deokpung-kitchen-overview.webp`: 주방 전체
-  - `assets/images/residential/deokpung-kitchen-front.webp`: 주방 정면
-  - `assets/images/residential/deokpung-kitchen-side.webp`: 주방 측면
-  - `assets/images/residential/deokpung-room.webp`: 생활공간
-  - `assets/images/residential/deokpung-dressing.webp`: 수납·복도
-  - `assets/images/residential/deokpung-living.webp`: 거실·마감
-
-이미지는 사용자가 제공한 원본을 바탕으로 이전 대화에서 제작된 **로고·워터마크 제거 편집본**을 웹 최적화한 것임. 원본 이미지와 동일한 픽셀·세부 마감 재현을 보장하지 않으며, 보정본을 사용하는 점은 홈페이지에 명시했습니다. 수정 전 사진을 그대로 재현해야 하는 기술적 도면/상세 시공자료로 쓰지 않습니다.
-
-- `index.html`: 기존 참고 사진 4장 목록을 두 프로젝트의 대표 사진 카드로 교체, 영문 브랜드 TheMe 유지.
-- `apartment-remodeling.html`: 두 프로젝트별 대표 이미지 + 짧은 가로 사진 레일로 구성. 업로드 피드처럼 세로로 길게 늘어지는 구조 제거.
-- `assets/residential-gallery.js`: 사진 확대, 프로젝트 내부 이전/다음 이동, X 닫기 시 현재 스크롤 복원.
-- `commercial-interior.html`: 원래 상업공간 5장 유지. 모바일에서 긴 세로 목록 대신 가로 스와이프.
-- **복구점:** `backup/before-residential-portfolio-20261024`
+실사용 상담 수신함에서의 전송·수신 확인, 휴대폰에서 티맵 호출, 포트폴리오 팝업 동작은 운영 환경에서 확인해야 합니다. 이 README는 GitHub 유지보수용 문서이며 고객용 홈페이지에 표시되지 않습니다.
