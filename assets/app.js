@@ -29,6 +29,9 @@
   document.querySelectorAll('[data-theme-map-link]').forEach(a => {
     if (company.mapUrl) a.href = company.mapUrl;
   });
+  document.querySelectorAll('[data-theme-directions-link]').forEach(a => {
+    if (company.directionsUrl) a.href = company.directionsUrl;
+  });
   document.querySelectorAll('[data-theme-address]').forEach(el => {
     if (company.address) el.textContent = company.address;
   });
@@ -76,10 +79,16 @@
   }
 
   const syncDialogBody = () => document.body.classList.toggle('modal-open', inquiry.open || spaceDialog.open);
-  document.querySelectorAll('[data-open-inquiry]').forEach(btn => btn.addEventListener('click', () => {
+  document.querySelectorAll('[data-open-inquiry], [data-open-inquiry-link]').forEach(btn => btn.addEventListener('click', event => {
+    event.preventDefault();
     setNavOpen(false);
     inquiry.showModal();
     syncDialogBody();
+    if (btn.matches('[data-open-inquiry-link]')) {
+      const projectType = document.getElementById('form-type');
+      projectType.value = '상업공간 인테리어';
+      projectType.dispatchEvent(new Event('change', {bubbles:true}));
+    }
   }));
   document.querySelectorAll('[data-close-inquiry]').forEach(btn => btn.addEventListener('click', () => inquiry.close()));
   [inquiry, spaceDialog].forEach(dialog => {
