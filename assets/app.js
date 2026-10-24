@@ -327,7 +327,7 @@
       if (!response.ok || String(result.success).toLowerCase() !== 'true') {
         const providerMessage = String(result.message || '');
         if (/activat|verif|confirm|actived/i.test(providerMessage)) {
-          setStatus('is-warning', '수신 이메일 인증이 필요합니다. 디자인더미 담당자가 테스트 수신 메일의 “Activate Form”을 눌러야 이후 상담 메일이 수신됩니다. 지금은 접수 완료 상태가 아닙니다.');
+          setStatus('is-warning', '수신 이메일 인증이 필요합니다. 디자인더미 담당자가 수신 이메일로 발송된 인증 안내의 “Activate Form”을 눌러야 상담 메일이 수신됩니다. 지금은 접수 완료 상태가 아닙니다.');
         } else {
           setStatus('is-error', '상담 정보가 전송되지 않았습니다. 전화 상담 또는 메일 앱 직접 작성 기능을 이용해주세요.');
         }
