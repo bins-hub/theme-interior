@@ -84,3 +84,28 @@ assets/favicon.svg    기본 임시 아이콘
 - 지도: `assets/site-config.js`의 `mapUrl`은 경기도 하남시 덕풍북로251번길 36(덕풍동 806-2)의 좌표(37.5487329, 127.2111985)를 기준으로 한 카카오맵 위치 표시. `directionsUrl`은 같은 좌표로 길찾기 설정. 건물 위치이며 1층/101호 위치는 현장 안내로 확인.
 - 고객의 브라우저 캐시로 구버전 상담창이 보이지 않도록 HTML에서 CSS/JS 파일 버전값을 갱신.
 - 구버전 안전 복구점: `backup/before-real-inquiry-20261024`, 더 오래된 복구점: `backup/before-contact-20261024`.
+
+## TMAP 전환 및 검색 최적화 (2026-10-24)
+
+### TMAP 길찾기
+- 카카오맵 대신 `assets/site-config.js`의 `tmap://route?goalname=…&goalx=…&goaly=…` 모바일 딥링크를 사용합니다.
+- 갤럭시/아이폰에 TMAP 앱이 설치되어 있어야 합니다. 일부 인앱 브라우저·PC에서는 외부 앱 링크가 열리지 않을 수 있으므로 **주소 복사** 및 **TMAP 설치** 링크를 함께 제공합니다.
+- 현재 목적지 좌표는 이전 사이트의 지도 설정값(127.2111985, 37.5487329)이며 **정확한 출입구·사무실 위치는 담당자가 현장에서 검증한 뒤 확정**해야 합니다.
+
+### 기본 SEO
+- `index.html`의 `noindex,nofollow` 제거 및 `robots=index,follow`.
+- `canonical`, OG 메타데이터, 타이틀/설명, `LocalBusiness` JSON-LD.
+- **실제로 공개된 별도 서비스 페이지** `apartment-remodeling.html` 및 `commercial-interior.html`에 서로 다른 제목·본문·Service JSON-LD 부여.
+- `sitemap.xml`: 메인 + 서비스 2개 페이지. 현재 공개 주소: `https://bins-hub.github.io/theme-interior/`.
+- `robots.txt`도 버전 관리 목적상 추가했지만 **GitHub Pages 프로젝트 경로 /theme-interior/의 robots.txt는 검색 로봇이 찾는 호스트 루트 /robots.txt가 아닙니다.** 별도 도메인 연결 시 새 도메인 루트로 이전 후 sitemap 경로 수정 필요.
+- 네이버 서치어드바이저는 보통 호스트 단위의 소유확인만 지원하므로, 전용 도메인 정한 후 등록하면 사이트별로 관리하기 편리합니다. 구글 Search Console URL-prefix 등록 및 사이트맵 제출도 진행하세요.
+- 모든 실제 시공 실적 이미지와 사례·리뷰는 검증 전까지 시안 이미지로 명시. 실제 사진 도착 후 이미지 alt·프로젝트별 본문·평형·지역·공정 설명 등을 업데이트합니다.
+- GEO(생성형 AI 검색): 검증 가능한 업체 정보, 질문/답, 정적 HTML에 읽히는 서비스 설명에 집중하며 AI 검색 노출이나 상위 노출을 보장하지 않습니다. Google 공식 가이드는 특별한 `llms.txt`가 필요하지 않다고 설명합니다.
+- 검색엔진 등록과 색인 여부 확인, 검색순위 검증은 아직 별도 수행되지 않았습니다.
+
+### 확인 자료
+- Google Search Central: LocalBusiness structured data / AI features and your website.
+- 네이버 서치어드바이저: robots.txt, 검색 노출 기본 가이드.
+
+### 복원
+- 변경 전 스냅샷 브랜치: `backup/pre-tmap-seo-20261024`. 기존 파일이나 이전 동작으로 복구할 수 있습니다.
