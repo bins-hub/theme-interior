@@ -10,7 +10,6 @@
   const spaceDialog = document.getElementById('space-dialog');
   const inquiryForm = document.getElementById('inquiry-form');
   const inquiryResult = document.getElementById('inquiry-result');
-  const inquiryOutput = document.getElementById('inquiry-output');
   const liveFeedback = document.getElementById('copy-feedback');
   // Contact data is managed in one place: assets/site-config.js
   const company = window.THEME_SITE_CONFIG || {};
@@ -109,69 +108,164 @@
   }));
   document.querySelectorAll('[data-close-space]').forEach(btn => btn.addEventListener('click', () => spaceDialog.close()));
 
-  const field = (id) => document.getElementById(id).value.trim() || '미정';
-  let preparedEmail = '';
-  inquiryForm.addEventListener('submit', e => {
-    e.preventDefault();
-    if (!inquiryForm.reportValidity()) return;
-    if (!inquiryEmail) {
-      window.alert('상담 이메일이 아직 설정되지 않았습니다. 전화 상담을 이용해주세요.');
+  // 상담 접수: GitHub Pages 자체에는 메일 서버가 없으므로 FormSubmit AJAX 사용.
+  // 전송 오류나 수신 이메일 미인증 상태는 절대로 '접수 완료'로 표시하지 않습니다.
+  const formType = document.getElementById('form-type');
+  const formSize = document.getElementById('form-size');
+  const commercialWrap = document.getElementById('form-commercial-wrap');
+  const commercialField = document.getElementById('form-commercial');
+  const formStatus = document.getElementById('inquiry-status');
+  const submitButton = document.getElementById('send-inquiry');
+  const fallbackButton = document.getElementById('email-fallback');
+  const formMessage = document.getElementById('inquiry-result-message');
+  let isSubmitting = false;
+
+  const field = id => document.getElementById(id).value.trim();
+  const valueOrUnknown = id => field(id) || '미정';
+  const formatSubject = () => '[디자인더미 TheMe] ' + (field('form-type') || '인테리어') + ' 상담 - ' + (field('form-name') || '고객');
+  const formatDetails = () => [
+    '회사: 디자인더미 TheMe',
+    '상담 분야: ' + valueOrUnknown('form-type'),
+    '고객 성함: ' + valueOrUnknown('form-name'),
+    '고객 연락처: ' + valueOrUnknown('form-phone'),
+    '공사 예정 위치: ' + valueOrUnknown('form-location'),
+    '면적/평형: ' + valueOrUnknown('form-size'),
+    ...(formType.value === '상업공간 인테리어' ? ['상업공간 종류: ' + valueOrUnknown('form-commercial')] : []),
+    '희망 공사 시기: ' + valueOrUnknown('form-when'),
+    '예상 예산: ' + valueOrUnknown('form-budget'),
+    '상담 내용: ' + valueOrUnknown('form-notes')
+  ].join('\n');
+
+  function updateConsultationType() {
+    const commercial = formType.value === '상업공간 인테리어';
+    const previousValue = formSize.value;
+    const sizes = commercial
+      ? ['10평 미만', '10~20평', '20~40평', '40~60평', '60평 이상', '미정']
+      : ['20평대', '30평대', '40평대', '50평대 이상', '아직 미정'];
+    formSize.replaceChildren(new Option('선택해주세요', ''), ...sizes.map(v => new Option(v, v)));
+    if (sizes.includes(previousValue)) formSize.value = previousValue;
+    commercialWrap.hidden = !commercial;
+    commercialField.disabled = !commercial;
+    commercialField.required = commercial;
+    if (!commercial) commercialField.value = '';
+    document.getElementById('form-location-label').textContent = commercial ? '매장·사무실 위치' : '아파트 위치';
+    document.getElementById('form-location').placeholder = commercial ? '예: 경기 하남시, 미사역 인근' : '예: 경기 하남시';
+  }
+  formType.addEventListener('change', updateConsultationType);
+  updateConsultationType();
+
+  const clearStatus = () => {
+    formStatus.textContent = '';
+    formStatus.className = 'inquiry-status';
+  };
+  const setStatus = (kind, text) => {
+    formStatus.textContent = text;
+    formStatus.className = 'inquiry-status' + (kind ? ' ' + kind : '');
+  };
+
+  function mailFallback() {
+    const email = String(company.inquiryEmail || '').trim();
+    if (!email) {
+      setStatus('is-error', '상담 이메일이 설정되지 않았습니다. 전화 상담을 이용해주세요.');
       return;
     }
-    inquiryOutput.textContent = [
-      '[디자인더미 TheMe | 아파트 전체 리모델링 상담]',
-      '',
-      '성함: ' + field('form-name'),
-      '연락처: ' + field('form-phone'),
-      '아파트 위치: ' + field('form-location'),
-      '평형: ' + field('form-size'),
-      '희망 공사 시기: ' + field('form-when'),
-      '예상 예산: ' + field('form-budget'),
-      '상담하고 싶은 내용: ' + field('form-notes'),
-      '',
-      '※ 이 화면만으로는 상담이 접수되지 않습니다. 메일 앱에서 보내기를 눌러주세요.'
-    ].join('\n');
-    const subject = '[디자인더미 TheMe] 아파트 리모델링 상담 - ' + field('form-name');
-    preparedEmail = 'mailto:' + encodeURIComponent(inquiryEmail)
-      + '?subject=' + encodeURIComponent(subject)
-      + '&body=' + encodeURIComponent(inquiryOutput.textContent);
-    inquiryForm.hidden = true;
-    inquiryResult.hidden = false;
-    liveFeedback.textContent = '상담 메일 초안이 준비됐습니다. 메일 앱에서 직접 전송해주세요.';
-    document.getElementById('send-inquiry').focus();
-  });
+    if (!field('form-name') || !field('form-phone')) {
+      setStatus('is-error', '성함과 연락처를 먼저 입력해 주세요.');
+      return;
+    }
+    const url = 'mailto:' + encodeURIComponent(email)
+      + '?subject=' + encodeURIComponent(formatSubject())
+      + '&body=' + encodeURIComponent(formatDetails());
+    window.location.href = url;
+    setStatus('is-note', '메일 앱이 열리면 내용을 확인한 뒤 직접 보내기를 눌러주세요.');
+  }
+  fallbackButton.addEventListener('click', mailFallback);
 
-  document.getElementById('send-inquiry').addEventListener('click', () => {
-    if (!preparedEmail) return;
-    liveFeedback.textContent = '메일 앱을 열고, 전송 버튼을 눌러주세요. 홈페이지에서 자동 접수되지 않습니다.';
-    window.location.href = preparedEmail;
+  inquiryForm.addEventListener('submit', async e => {
+    e.preventDefault();
+    if (isSubmitting) return;
+    clearStatus();
+    if (!inquiryForm.reportValidity()) return;
+
+    const phone = field('form-phone').replace(/[\s\-().]/g, '');
+    if (!/^0\d{8,10}$/.test(phone)) {
+      setStatus('is-error', '연락처를 다시 확인해 주세요. 숫자로 9~11자리를 입력해주세요.');
+      document.getElementById('form-phone').focus();
+      return;
+    }
+    const inbox = String(company.inquiryEmail || '').trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(inbox)) {
+      setStatus('is-error', '상담 이메일이 아직 설정되지 않았습니다. 전화 상담을 이용해주세요.');
+      return;
+    }
+    if (field('form-honey')) {
+      setStatus('is-error', '상담 전송을 처리하지 못했습니다. 전화로 문의해주세요.');
+      return;
+    }
+
+    const payload = {
+      name: field('form-name'),
+      phone: field('form-phone'),
+      consultation_type: field('form-type'),
+      location: field('form-location') || '미정',
+      space_size: field('form-size') || '미정',
+      commercial_category: formType.value === '상업공간 인테리어' ? valueOrUnknown('form-commercial') : '해당 없음',
+      schedule: field('form-when') || '미정',
+      budget: field('form-budget') || '미정',
+      message: field('form-notes') || '별도 문의 내용 없음',
+      _subject: formatSubject(),
+      _template: 'table',
+      _honey: '',
+      _url: 'https://bins-hub.github.io/theme-interior/'
+    };
+
+    isSubmitting = true;
+    submitButton.disabled = true;
+    submitButton.textContent = '전송 처리 중…';
+    setStatus('is-note', '전송 서비스로 신청 정보를 전달하는 중입니다.');
+    try {
+      const endpoint = (company.formSubmitEndpoint || 'https://formsubmit.co/ajax/')
+        + encodeURIComponent(inbox);
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+      const raw = await response.text();
+      let result;
+      try { result = JSON.parse(raw); } catch { throw new Error('서버가 올바른 응답을 반환하지 않았습니다.'); }
+      // FormSubmit uses string "true" / "false" even for HTTP 200 failures.
+      if (!response.ok || String(result.success).toLowerCase() !== 'true') {
+        const providerMessage = String(result.message || '');
+        if (/activat|verif|confirm|actived/i.test(providerMessage)) {
+          setStatus('is-warning', '수신 이메일 인증이 필요합니다. 디자인더미 담당자가 테스트 수신 메일의 “Activate Form”을 눌러야 이후 상담 메일이 수신됩니다. 지금은 접수 완료 상태가 아닙니다.');
+        } else {
+          setStatus('is-error', '상담 정보가 전송되지 않았습니다. 전화 상담 또는 메일 앱 직접 작성 기능을 이용해주세요.');
+        }
+        return;
+      }
+      inquiryForm.hidden = true;
+      document.getElementById('inquiry-result').hidden = false;
+      formMessage.textContent = '상담 내용이 전송 서비스에서 성공으로 처리됐습니다. 담당자가 실제 이메일 수신을 확인한 뒤 연락드립니다.';
+      liveFeedback.textContent = '';
+    } catch {
+      setStatus('is-error', '네트워크 문제로 자동 전송 여부를 확인하지 못했습니다. 중복 제출 전에 담당자에게 전화로 확인하거나 메일 앱으로 직접 보내주세요.');
+    } finally {
+      isSubmitting = false;
+      submitButton.disabled = false;
+      submitButton.innerHTML = '상담 신청 전송하기 <span aria-hidden="true">→</span>';
+    }
   });
 
   document.getElementById('edit-inquiry').addEventListener('click', () => {
+    inquiryForm.reset();
+    updateConsultationType();
     inquiryForm.hidden = false;
-    inquiryResult.hidden = true;
-    document.getElementById('form-location').focus();
-  });
-
-  document.getElementById('copy-inquiry').addEventListener('click', async () => {
-    const data = inquiryOutput.textContent;
-    try {
-      if (navigator.clipboard && window.isSecureContext) {
-        await navigator.clipboard.writeText(data);
-      } else {
-        const temp = document.createElement('textarea');
-        temp.value = data;
-        temp.style.position = 'fixed';
-        temp.style.opacity = '0';
-        document.body.appendChild(temp);
-        temp.select();
-        const copied = document.execCommand('copy');
-        temp.remove();
-        if (!copied) throw new Error('copy unavailable');
-      }
-      liveFeedback.textContent = '내용을 복사했습니다. 이메일에 붙여넣어 직접 보내주세요.';
-    } catch {
-      liveFeedback.textContent = '자동 복사를 사용할 수 없습니다. 내용을 길게 눌러 복사해주세요.';
-    }
+    document.getElementById('inquiry-result').hidden = true;
+    clearStatus();
+    document.getElementById('form-type').focus();
   });
 })();
