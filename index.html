@@ -17,6 +17,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;600;700&family=Noto+Serif+KR:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/styles.css">
+  <script src="assets/site-config.js" defer></script>
   <script src="assets/app.js" defer></script>
   <link rel="preconnect" href="https://images.unsplash.com">
 </head>
@@ -161,25 +162,46 @@
         <h2 class="display-heading" id="contact-title">당신의 집은,<br><em>어떤 공간이어야 할까요?</em></h2>
         <p>막연했던 리모델링 계획도, 좋은 질문에서 시작됩니다.<br>우리 집에 필요한 변화부터 정리해보세요.</p>
         <button type="button" class="btn btn-cream" data-open-inquiry>우리 집 리모델링 상담 준비하기 <span aria-hidden="true">↗</span></button>
-        <div class="contact-fineprint">현재는 홈페이지 시안 단계입니다. 작성한 내용은 자동 전송되지 않습니다.</div>
+        <div class="contact-shortcuts">
+          <a href="tel:0317924551" data-theme-phone-link>전화 상담 · 031-792-4551 ↗</a>
+          <a href="https://blog.naver.com/771jung" data-theme-blog-link target="_blank" rel="noopener noreferrer">네이버 블로그 ↗</a>
+          <a href="https://map.naver.com/" data-theme-map-link target="_blank" rel="noopener noreferrer">사무실 위치 ↗</a>
+        </div>
+        <div class="contact-fineprint">테스트용 이메일 상담입니다. 작성 후 메일 앱에서 직접 ‘보내기’를 눌러야 전달됩니다.</div>
       </div>
       <span class="demo-badge contact-badge">시안용 참고 이미지</span>
     </section>
   </main>
 
-  <footer class="footer"><div class="page-width footer-top"><div class="footer-brand"><span class="brand-kr">더미인테리어</span><span class="brand-en">TheMe<span class="brand-dot">.</span></span><small>PREMIUM APARTMENT REMODELING</small></div><div class="footer-links"><a href="#about">ABOUT</a><a href="#spaces">SPACES</a><a href="#strength">STANDARD</a><a href="#process">PROCESS</a><a href="#contact">CONTACT</a></div><div class="footer-notice"><b>공식 연락처 준비 중</b><p>전화번호 · 이메일 · 사업자정보 · 소재지는<br>실제 정보 확인 후 표시합니다.</p></div></div><div class="page-width footer-bottom"><span>© <span id="year">2026</span> THEME INTERIOR. ALL RIGHTS RESERVED.</span><span>본 사이트는 제작 시안입니다. 사용된 참고 이미지는 당사 시공 실적이 아닙니다.</span><a href="#top">BACK TO TOP ↑</a></div></footer>
+  <footer class="footer"><div class="page-width footer-top"><div class="footer-brand"><span class="brand-kr">더미인테리어</span><span class="brand-en">TheMe<span class="brand-dot">.</span></span><small>PREMIUM APARTMENT REMODELING</small></div><div class="footer-links"><a href="#about">ABOUT</a><a href="#spaces">SPACES</a><a href="#strength">STANDARD</a><a href="#process">PROCESS</a><a href="#contact">CONTACT</a></div><div class="footer-notice"><b>더미인테리어 TheMe · 상담 안내</b>
+  <address data-theme-address>경기 하남시 덕풍북로251번길 36 1층</address>
+  <div class="footer-contact-links">
+    <a href="tel:0317924551" data-theme-phone-link>전화 · 031-792-4551</a>
+    <a href="mailto:n3888171@gmail.com" data-theme-email-link>이메일 상담 ↗</a>
+    <a href="https://blog.naver.com/771jung" data-theme-blog-link target="_blank" rel="noopener noreferrer">네이버 블로그 ↗</a>
+    <a href="https://map.naver.com/" data-theme-map-link target="_blank" rel="noopener noreferrer">오시는 길 ↗</a>
+  </div>
+</div></div><div class="page-width footer-bottom"><span>© <span id="year">2026</span> THEME INTERIOR. ALL RIGHTS RESERVED.</span><span>본 사이트는 제작 시안입니다. 사용된 참고 이미지는 당사 시공 실적이 아닙니다.</span><a href="#top">BACK TO TOP ↑</a></div></footer>
 
   <button type="button" class="mobile-bottom-cta" data-open-inquiry>아파트 전체 리모델링 상담 준비 <span>↗</span></button>
 
   <dialog id="inquiry-dialog" class="inquiry-dialog" aria-labelledby="inquiry-title">
-    <div class="dialog-heading"><div><p class="eyebrow">THEME / INQUIRY PREPARATION</p><h2 id="inquiry-title">우리 집 리모델링 상담 준비</h2><p>기본 정보를 입력하면 상담 내용을 정리해 복사할 수 있습니다.</p></div><button type="button" class="modal-close" data-close-inquiry aria-label="닫기">×</button></div>
+    <div class="dialog-heading"><div><p class="eyebrow">THEME / PRIVATE INQUIRY</p><h2 id="inquiry-title">우리 집 리모델링 상담</h2><p>상담 내용을 작성하면 이메일 초안이 만들어집니다. 메일 앱에서 직접 ‘보내기’를 눌러주세요.</p></div><button type="button" class="modal-close" data-close-inquiry aria-label="닫기">×</button></div>
     <form id="inquiry-form">
-      <div class="form-grid"><label>아파트 위치 <input type="text" id="form-location" maxlength="80" placeholder="예: 경기 하남시" autocomplete="address-level2"></label><label>평형 <select id="form-size"><option value="">선택해주세요</option><option>20평대</option><option>30평대</option><option>40평대</option><option>50평대 이상</option><option>아직 미정</option></select></label><label>희망 시기 <select id="form-when"><option value="">선택해주세요</option><option>1~3개월 이내</option><option>3~6개월 이내</option><option>6개월 이후</option><option>미정</option></select></label><label>예상 예산 <select id="form-budget"><option value="">선택해주세요</option><option>3천만 원 미만</option><option>3천만~5천만 원</option><option>5천만~8천만 원</option><option>8천만 원 이상</option><option>상담 후 결정</option></select></label></div>
+      <div class="form-grid">
+        <label>성함 <input type="text" id="form-name" maxlength="40" placeholder="이름" autocomplete="name" required></label>
+        <label>연락처 <input type="tel" id="form-phone" maxlength="20" placeholder="010-0000-0000" autocomplete="tel" inputmode="tel" required></label>
+        <label>아파트 위치 <input type="text" id="form-location" maxlength="80" placeholder="예: 경기 하남시" autocomplete="address-level2"></label>
+        <label>평형 <select id="form-size"><option value="">선택해주세요</option><option>20평대</option><option>30평대</option><option>40평대</option><option>50평대 이상</option><option>아직 미정</option></select></label>
+        <label>희망 시기 <select id="form-when"><option value="">선택해주세요</option><option>1~3개월 이내</option><option>3~6개월 이내</option><option>6개월 이후</option><option>미정</option></select></label>
+        <label>예상 예산 <select id="form-budget"><option value="">선택해주세요</option><option>3천만 원 미만</option><option>3천만~5천만 원</option><option>5천만~8천만 원</option><option>8천만 원 이상</option><option>상담 후 결정</option></select></label>
+      </div>
       <label>가장 고민되는 부분 <textarea id="form-notes" rows="3" maxlength="700" placeholder="예: 오래된 배관과 주방 동선, 수납을 전체적으로 바꾸고 싶어요."></textarea></label>
-      <button type="submit" class="btn btn-dark form-submit">상담 내용 만들기 <span>→</span></button>
-      <p class="privacy-hint">현재 상담 서버와 연락 채널이 연결되지 않아, 입력 내용은 전송·저장되지 않습니다. 개인 연락처나 민감한 정보를 입력하지 마세요.</p>
+      <label class="form-consent"><input type="checkbox" id="form-consent" required><span>개인정보 수집·이용에 동의합니다.<small>성함·연락처·아파트 위치·문의내용을 상담 응대를 위해 이메일로 전달합니다. 홈페이지 서버에는 저장하지 않으며, 전송 후 수신 메일함에 보관됩니다. 동의를 거부하면 이메일 상담을 진행할 수 없습니다. 삭제 문의: 아래 상담 이메일.</small></span></label>
+      <button type="submit" class="btn btn-dark form-submit">상담 메일 작성하기 <span>→</span></button>
+      <p class="privacy-hint">테스트 방식: 사이트에서 자동 발송되지 않습니다. 메일 앱이 열리면 내용을 확인하고 ‘보내기’를 눌러야 접수됩니다.</p>
     </form>
-    <div class="inquiry-result" id="inquiry-result" hidden><h3>상담 준비 내용</h3><pre id="inquiry-output"></pre><div class="result-actions"><button class="btn btn-dark" type="button" id="copy-inquiry">내용 복사 <span>↗</span></button><button type="button" class="btn btn-light" id="edit-inquiry">수정하기</button></div><p id="copy-feedback" role="status" aria-live="polite"></p><small>복사한 내용을 향후 연결할 전화·카카오톡·이메일 상담 채널로 전달할 수 있습니다.</small></div>
+    <div class="inquiry-result" id="inquiry-result" hidden><h3>상담 메일 미리보기</h3><pre id="inquiry-output"></pre><div class="result-actions"><button class="btn btn-dark" type="button" id="send-inquiry">메일 앱 열기 <span>↗</span></button><button class="btn btn-light" type="button" id="copy-inquiry">내용 복사</button><button type="button" class="btn btn-light" id="edit-inquiry">수정하기</button></div><p id="copy-feedback" role="status" aria-live="polite"></p><small>메일 앱에서 직접 전송해야 접수됩니다. 메일 앱이 없으면 내용을 복사하여 <a data-theme-email-link href="mailto:n3888171@gmail.com">상담 이메일</a>로 보내주세요.</small></div>
   </dialog>
 
   <dialog id="space-dialog" class="space-dialog" aria-labelledby="space-dialog-title"><button class="modal-close light" type="button" data-close-space aria-label="사진 닫기">×</button><img id="space-dialog-image" src="assets/images/living.jpg" alt="공간 스타일 참고 이미지"><div class="space-dialog-info"><span>DESIGN REFERENCE / NOT AN ACTUAL PROJECT</span><h2 id="space-dialog-title">거실</h2><p id="space-dialog-copy">공간 스타일 참고 이미지입니다.</p><p class="space-disclaimer">※ 실제 더미인테리어 시공 사례가 아닙니다.</p></div></dialog>
