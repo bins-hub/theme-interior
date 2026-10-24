@@ -1,13 +1,9 @@
 (() => {
   'use strict';
-  // Packaged preview imagery stays local in GitHub Pages.
-  // Replace assets/images/*.jpg with verified TheMe project photos when available.
-  const USE_REMOTE_DEMO_IMAGES = false;
   const header = document.getElementById('site-header');
   const navToggle = document.getElementById('menu-toggle');
   const mobileNav = document.getElementById('mobile-nav');
   const inquiry = document.getElementById('inquiry-dialog');
-  const spaceDialog = document.getElementById('space-dialog');
   const inquiryForm = document.getElementById('inquiry-form');
   const inquiryResult = document.getElementById('inquiry-result');
   const liveFeedback = document.getElementById('copy-feedback');
@@ -73,18 +69,6 @@
   mobileNav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setNavOpen(false)));
   document.addEventListener('keydown', e => { if (e.key === 'Escape') setNavOpen(false); });
 
-  // Nonessential optional image enhancement: every image has a packaged offline fallback.
-  if (USE_REMOTE_DEMO_IMAGES) {
-    document.querySelectorAll('img[data-demo-remote]').forEach(img => {
-      const remote = img.getAttribute('data-demo-remote');
-      if (!remote) return;
-      const image = new Image();
-      image.decoding = 'async';
-      image.onload = () => { img.src = remote; };
-      image.src = remote;
-    });
-  }
-
   if ('IntersectionObserver' in window) {
     const io = new IntersectionObserver(entries => {
       entries.forEach(entry => {
@@ -115,7 +99,7 @@
     body.classList.add('modal-open');
   };
   const syncDialogBody = () => {
-    if (inquiry.open || spaceDialog.open) return;
+    if (inquiry.open) return;
     if (!modalScrollLocked) {
       document.body.classList.remove('modal-open');
       return;
@@ -156,39 +140,10 @@
     }
   }));
   document.querySelectorAll('[data-close-inquiry]').forEach(btn => btn.addEventListener('click', () => inquiry.close()));
-  [inquiry, spaceDialog].forEach(dialog => {
-    dialog.addEventListener('close', syncDialogBody);
-    dialog.addEventListener('click', e => {
-      if (e.target === dialog) dialog.close();
-    });
+  inquiry.addEventListener('close', syncDialogBody);
+  inquiry.addEventListener('click', e => {
+    if (e.target === inquiry) inquiry.close();
   });
-
-  const roomInfo = [
-    { title:'거실', summary:'생활 동선과 빛, 가구 배치를 함께 고려하는 거실 디자인입니다.' },
-    { title:'주방', summary:'조리와 수납, 식사 공간의 흐름을 생각한 주방 디자인입니다.' },
-    { title:'침실', summary:'온전히 쉴 수 있도록 조도와 소재, 수납을 조율한 침실 디자인입니다.' },
-    { title:'현관', summary:'집의 첫인상과 실용적인 수납을 동시에 고려하는 현관 디자인입니다.' }
-  ];
-  const spaceCards = [...document.querySelectorAll('.space-card')];
-  let activeSpaceIndex = 0;
-  const displaySpace = index => {
-    activeSpaceIndex = (index + spaceCards.length) % spaceCards.length;
-    const source = spaceCards[activeSpaceIndex].querySelector('img');
-    const target = document.getElementById('space-dialog-image');
-    target.src = source.currentSrc || source.src;
-    target.alt = source.alt;
-    document.getElementById('space-dialog-title').textContent = roomInfo[activeSpaceIndex].title;
-    document.getElementById('space-dialog-copy').textContent = roomInfo[activeSpaceIndex].summary;
-    document.getElementById('space-dialog-count').textContent = (activeSpaceIndex + 1) + ' / ' + spaceCards.length;
-  };
-  spaceCards.forEach((btn, index) => btn.addEventListener('click', () => {
-    displaySpace(index);
-    lockModalScroll(btn);
-    spaceDialog.showModal();
-  }));
-  document.getElementById('space-dialog-prev').addEventListener('click', () => displaySpace(activeSpaceIndex - 1));
-  document.getElementById('space-dialog-next').addEventListener('click', () => displaySpace(activeSpaceIndex + 1));
-  document.querySelectorAll('[data-close-space]').forEach(btn => btn.addEventListener('click', () => spaceDialog.close()));
 
   // 상담 접수: GitHub Pages 자체에는 메일 서버가 없으므로 FormSubmit AJAX 사용.
   // 전송 오류나 수신 이메일 미인증 상태는 절대로 '접수 완료'로 표시하지 않습니다.
@@ -308,7 +263,7 @@
     isSubmitting = true;
     submitButton.disabled = true;
     submitButton.textContent = '전송 처리 중…';
-    setStatus('is-note', '전송 서비스로 신청 정보를 전달하는 중입니다.');
+    setStatus('is-note', '상담 신청 내용을 전송하고 있습니다.');
     try {
       const endpoint = (company.formSubmitEndpoint || 'https://formsubmit.co/ajax/')
         + encodeURIComponent(inbox);
@@ -327,7 +282,7 @@
       if (!response.ok || String(result.success).toLowerCase() !== 'true') {
         const providerMessage = String(result.message || '');
         if (/activat|verif|confirm|actived/i.test(providerMessage)) {
-          setStatus('is-warning', '수신 이메일 인증이 필요합니다. 디자인더미 담당자가 수신 이메일로 발송된 인증 안내의 “Activate Form”을 눌러야 상담 메일이 수신됩니다. 지금은 접수 완료 상태가 아닙니다.');
+          setStatus('is-warning', '상담 접수 준비가 완료되지 않아 지금은 신청이 접수되지 않았습니다. 전화 또는 이메일로 문의해 주세요.');
         } else {
           setStatus('is-error', '상담 정보가 전송되지 않았습니다. 전화 상담 또는 메일 앱 직접 작성 기능을 이용해주세요.');
         }
@@ -335,7 +290,7 @@
       }
       inquiryForm.hidden = true;
       document.getElementById('inquiry-result').hidden = false;
-      formMessage.textContent = '상담 내용이 전송 서비스에서 성공으로 처리됐습니다. 담당자가 실제 이메일 수신을 확인한 뒤 연락드립니다.';
+      formMessage.textContent = '상담 신청 내용을 전송했습니다. 확인 후 연락드리겠습니다.';
       liveFeedback.textContent = '';
     } catch {
       setStatus('is-error', '네트워크 문제로 자동 전송 여부를 확인하지 못했습니다. 중복 제출 전에 담당자에게 전화로 확인하거나 메일 앱으로 직접 보내주세요.');
