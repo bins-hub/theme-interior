@@ -6,5 +6,7 @@ window.THEME_SITE_CONFIG = Object.freeze({
   phoneDial: '0317924551',
   address: '경기 하남시 덕풍북로251번길 36 1층',
   blogUrl: 'https://blog.naver.com/771jung',
-  mapUrl: 'https://map.naver.com/p/search/' + encodeURIComponent('경기 하남시 덕풍북로251번길 36 1층')
+  // 건물 주소 중심 좌표(하남시 덕풍동 806-2). 카카오맵 공식 위치/길찾기 딥링크
+  mapUrl: 'https://map.kakao.com/link/map/' + encodeURIComponent('디자인더미') + ',37.5487329,127.2111985',
+  directionsUrl: 'https://map.kakao.com/link/to/' + encodeURIComponent('디자인더미') + ',37.5487329,127.2111985'
 });
