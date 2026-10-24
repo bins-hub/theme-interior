@@ -96,12 +96,59 @@
     document.querySelectorAll('.reveal').forEach(el => el.classList.add('is-visible'));
   }
 
-  const syncDialogBody = () => document.body.classList.toggle('modal-open', inquiry.open || spaceDialog.open);
+  // Save the exact page position while a gallery or consultation overlay is open.
+  // Android in-app browsers can scroll to the top when showModal() changes focus.
+  let modalOriginScrollY = 0;
+  let modalOriginElement = null;
+  let modalScrollLocked = false;
+  const lockModalScroll = trigger => {
+    if (modalScrollLocked) return;
+    modalOriginScrollY = window.scrollY || document.documentElement.scrollTop || 0;
+    modalOriginElement = trigger;
+    modalScrollLocked = true;
+    const body = document.body;
+    body.style.position = 'fixed';
+    body.style.top = '-' + modalOriginScrollY + 'px';
+    body.style.left = '0';
+    body.style.right = '0';
+    body.style.width = '100%';
+    body.classList.add('modal-open');
+  };
+  const syncDialogBody = () => {
+    if (inquiry.open || spaceDialog.open) return;
+    if (!modalScrollLocked) {
+      document.body.classList.remove('modal-open');
+      return;
+    }
+    const savedY = modalOriginScrollY;
+    const focusTarget = modalOriginElement;
+    const body = document.body;
+    body.style.removeProperty('position');
+    body.style.removeProperty('top');
+    body.style.removeProperty('left');
+    body.style.removeProperty('right');
+    body.style.removeProperty('width');
+    body.classList.remove('modal-open');
+    modalScrollLocked = false;
+    modalOriginElement = null;
+    // Temporarily disable CSS smooth scrolling for a precise one-frame restoration.
+    const root = document.documentElement;
+    const oldScrollBehavior = root.style.scrollBehavior;
+    root.style.scrollBehavior = 'auto';
+    window.scrollTo(0, savedY);
+    requestAnimationFrame(() => {
+      window.scrollTo(0, savedY);
+      if (focusTarget && focusTarget.isConnected) {
+        try { focusTarget.focus({preventScroll:true}); } catch { /* Older mobile browsers */ }
+      }
+      root.style.scrollBehavior = oldScrollBehavior;
+    });
+  };
   document.querySelectorAll('[data-open-inquiry], [data-open-inquiry-link]').forEach(btn => btn.addEventListener('click', event => {
     event.preventDefault();
     setNavOpen(false);
+    lockModalScroll(btn);
     inquiry.showModal();
-    syncDialogBody();
     if (btn.matches('[data-open-inquiry-link]')) {
       const projectType = document.getElementById('form-type');
       projectType.value = '상업공간 인테리어';
@@ -122,17 +169,25 @@
     { title:'침실', summary:'온전히 쉴 수 있도록 조도와 소재, 수납을 조율한 침실 디자인입니다.' },
     { title:'현관', summary:'집의 첫인상과 실용적인 수납을 동시에 고려하는 현관 디자인입니다.' }
   ];
-  document.querySelectorAll('.space-card').forEach(btn => btn.addEventListener('click', () => {
-    const index = Number(btn.dataset.space);
-    const photo = btn.querySelector('img');
+  const spaceCards = [...document.querySelectorAll('.space-card')];
+  let activeSpaceIndex = 0;
+  const displaySpace = index => {
+    activeSpaceIndex = (index + spaceCards.length) % spaceCards.length;
+    const source = spaceCards[activeSpaceIndex].querySelector('img');
     const target = document.getElementById('space-dialog-image');
-    target.src = photo.currentSrc || photo.src;
-    target.alt = photo.alt;
-    document.getElementById('space-dialog-title').textContent = roomInfo[index].title;
-    document.getElementById('space-dialog-copy').textContent = roomInfo[index].summary;
+    target.src = source.currentSrc || source.src;
+    target.alt = source.alt;
+    document.getElementById('space-dialog-title').textContent = roomInfo[activeSpaceIndex].title;
+    document.getElementById('space-dialog-copy').textContent = roomInfo[activeSpaceIndex].summary;
+    document.getElementById('space-dialog-count').textContent = (activeSpaceIndex + 1) + ' / ' + spaceCards.length;
+  };
+  spaceCards.forEach((btn, index) => btn.addEventListener('click', () => {
+    displaySpace(index);
+    lockModalScroll(btn);
     spaceDialog.showModal();
-    syncDialogBody();
   }));
+  document.getElementById('space-dialog-prev').addEventListener('click', () => displaySpace(activeSpaceIndex - 1));
+  document.getElementById('space-dialog-next').addEventListener('click', () => displaySpace(activeSpaceIndex + 1));
   document.querySelectorAll('[data-close-space]').forEach(btn => btn.addEventListener('click', () => spaceDialog.close()));
 
   // 상담 접수: GitHub Pages 자체에는 메일 서버가 없으므로 FormSubmit AJAX 사용.
