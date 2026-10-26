@@ -1,7 +1,7 @@
 // 디자인더미 TheMi | 이 파일의 값만 바꾸면 연락처 설정이 업데이트됩니다.
 // 메일은 FormSubmit 외부 서비스로 접수됩니다. 받는 주소 변경 후 수신 인증을 다시 확인하세요.
 window.THEME_SITE_CONFIG = Object.freeze({
-  inquiryEmail: 'n3888171@gmail.com',
+  inquiryEmail: '771jung@naver.com',
   phoneDisplay: '031-792-4551',
   phoneDial: '0317924551',
   address: '경기 하남시 덕풍북로251번길 36 1층',

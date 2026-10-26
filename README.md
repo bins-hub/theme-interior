@@ -24,7 +24,7 @@
 - 전화: **031-792-4551**
 - 주소: **경기 하남시 덕풍북로251번길 36 1층**
 - 블로그: https://blog.naver.com/771jung
-- 현재 온라인 상담 수신 주소: `n3888171@gmail.com`
+- 현재 온라인 상담 수신 주소: `771jung@naver.com`
 
 **연락처 변경:** `assets/site-config.js`의 `inquiryEmail`, `phoneDisplay`, `phoneDial`, `address`, `blogUrl`을 수정합니다. 티맵 길찾기 목적지 좌표도 동일한 설정 파일에서 관리합니다.
 
