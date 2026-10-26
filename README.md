@@ -1,9 +1,9 @@
-# 디자인더미 TheMe | 공식 홈페이지
+# 디자인더미 TheMi | 공식 홈페이지
 
-**공개 사이트:** https://bins-hub.github.io/theme-interior/  
+**공개 사이트:** https://themi.co.kr/  
 **저장소:** https://github.com/bins-hub/theme-interior
 
-경기도 하남의 **디자인더미(TheMe)** 인테리어 홈페이지. 아파트 전체 리모델링과 상업공간 인테리어를 소개하고 온라인 상담을 접수하는 정적 HTML/CSS/JavaScript 사이트입니다.
+경기도 하남의 **디자인더미(TheMi)** 인테리어 홈페이지. 아파트 전체 리모델링과 상업공간 인테리어를 소개하고 온라인 상담을 접수하는 정적 HTML/CSS/JavaScript 사이트입니다.
 
 ## 공개 페이지
 
@@ -20,7 +20,7 @@
 
 ## 운영 연락처
 
-- 상호: **디자인더미** (TheMe)
+- 상호: **디자인더미** (TheMi)
 - 전화: **031-792-4551**
 - 주소: **경기 하남시 덕풍북로251번길 36 1층**
 - 블로그: https://blog.naver.com/771jung

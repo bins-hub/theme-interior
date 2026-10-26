@@ -2,4 +2,4 @@
 # 독립 도메인 연결 후 이 파일을 해당 도메인의 웹 루트에 배치하세요.
 User-agent: *
 Allow: /
-Sitemap: https://bins-hub.github.io/theme-interior/sitemap.xml
+Sitemap: https://themi.co.kr/sitemap.xml

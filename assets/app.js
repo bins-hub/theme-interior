@@ -159,9 +159,9 @@
 
   const field = id => document.getElementById(id).value.trim();
   const valueOrUnknown = id => field(id) || '미정';
-  const formatSubject = () => '[디자인더미 TheMe] ' + (field('form-type') || '인테리어') + ' 상담 - ' + (field('form-name') || '고객');
+  const formatSubject = () => '[디자인더미 TheMi] ' + (field('form-type') || '인테리어') + ' 상담 - ' + (field('form-name') || '고객');
   const formatDetails = () => [
-    '회사: 디자인더미 TheMe',
+    '회사: 디자인더미 TheMi',
     '상담 분야: ' + valueOrUnknown('form-type'),
     '고객 성함: ' + valueOrUnknown('form-name'),
     '고객 연락처: ' + valueOrUnknown('form-phone'),
@@ -257,7 +257,7 @@
       _subject: formatSubject(),
       _template: 'table',
       _honey: '',
-      _url: 'https://bins-hub.github.io/theme-interior/'
+      _url: 'https://themi.co.kr/'
     };
 
     isSubmitting = true;
