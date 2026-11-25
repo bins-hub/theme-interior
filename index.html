@@ -101,7 +101,8 @@
 <meta name="apple-mobile-web-app-title" content="디자인더미">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<script src="/assets/pwa-install.js?v=20261125-native" defer></script>
+<link rel="stylesheet" href="/assets/install-banner.css?v=20261125-banner">
+<script src="/assets/pwa-install.js?v=20261125-banner" defer></script>
 </head>
 <body>
   <a href="#main" class="skip-link">본문으로 바로가기</a>
@@ -338,5 +339,11 @@
     </div>
   </dialog>
 
+<aside id="themi-install-banner" class="themi-install-banner" aria-label="디자인더미 앱 설치 안내" hidden>
+  <button type="button" id="themi-install-close" class="themi-install-banner-close" aria-label="설치 안내 닫기">×</button>
+  <div class="themi-install-banner-row"><img class="themi-install-banner-icon" src="/assets/icons/icon-192.png" width="46" height="46" alt=""><div><strong>디자인더미를 설치하시겠습니까?</strong><p>바탕화면 또는 홈 화면에 추가하고 바로 접속하세요.</p></div></div>
+  <div class="themi-install-banner-actions"><button type="button" id="themi-install-yes" class="themi-install-yes">설치하기</button><button type="button" id="themi-install-later" class="themi-install-later">나중에</button></div>
+  <p id="themi-install-help" class="themi-install-banner-help" role="status" aria-live="polite" hidden></p>
+</aside>
 </body>
 </html>
