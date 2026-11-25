@@ -1,6 +1,6 @@
 {
   "id": "/",
-  "name": "디자인더미 TheMi",
+  "name": "디자인더미 TheMi — 인테리어·리모델링",
   "short_name": "디자인더미",
   "description": "하남·미사 인테리어 및 리모델링 상담",
   "lang": "ko-KR",
@@ -22,5 +22,6 @@
       "type": "image/png",
       "purpose": "any maskable"
     }
-  ]
+  ],
+  "orientation": "any"
 }
