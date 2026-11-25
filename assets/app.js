@@ -68,6 +68,11 @@
   navToggle.addEventListener('click', () => setNavOpen(navToggle.getAttribute('aria-expanded') !== 'true'));
   mobileNav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setNavOpen(false)));
   document.addEventListener('keydown', e => { if (e.key === 'Escape') setNavOpen(false); });
+  const desktopViewport = window.matchMedia('(min-width: 851px)');
+  const resetNavAtDesktop = event => { if (event.matches) setNavOpen(false); };
+  if (desktopViewport.addEventListener) desktopViewport.addEventListener('change', resetNavAtDesktop);
+  else if (desktopViewport.addListener) desktopViewport.addListener(resetNavAtDesktop);
+  resetNavAtDesktop(desktopViewport);
 
   if ('IntersectionObserver' in window) {
     const io = new IntersectionObserver(entries => {
