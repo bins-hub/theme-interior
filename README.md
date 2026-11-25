@@ -55,3 +55,15 @@ SEO: 세 공개 페이지에 페이지별 `title`, `description`, `canonical`, �
 최종 공개용 문구 정리 전 브랜치: `backup/before-production-copy-audit-20261024`.
 
 실사용 상담 수신함에서의 전송·수신 확인, 휴대폰에서 티맵 호출, 포트폴리오 팝업 동작은 운영 환경에서 확인해야 합니다. 이 README는 GitHub 유지보수용 문서이며 고객용 홈페이지에 표시되지 않습니다.
+
+## 시공 사례 관리자 (DB 없이 운영)
+
+- 공개 목록: https://themi.co.kr/projects/
+- 관리자: https://themi.co.kr/admin/
+- GitHub fine-grained personal access token을 본인 계정에서 발급: Only select repositories → theme-interior → Contents: Read and write. 만료 기간은 짧게 설정. 다른 권한은 추가하지 않습니다.
+- 토큰은 관리자 탭의 메모리에만 유지하며 새로고침/로그아웃하면 사라집니다. 토큰을 채팅, 저장소, URL에 붙여넣지 마세요. 관리자 화면 자체는 공개 URL이지만 GitHub 쓰기 권한 없이는 게시할 수 없습니다.
+- 사진 JPG/PNG 최대 12장, 25MB/장 입력, 긴 변 최대 1600px JPEG 재인코딩, 위치 메타데이터 제거. 사진 설명 필수. 첫 사진은 대표 이미지입니다.
+- 게시/수정/삭제는 main에 단일 Git commit으로 저장되며 기존 Pages 배포를 사용합니다. 배포 성공과 공개 반영은 별도로 확인하세요. 기존 정적 포트폴리오와 상담은 유지됩니다.
+- 저장소가 공개이므로 개인정보와 고객 사진 사용 권한 확인은 필수입니다. 미게시 사진도 커밋 과정에서 Git 객체로 생성될 수 있고 삭제 후에도 Git 기록에 남을 수 있습니다. 비공개 보관 기능은 제공하지 않습니다.
+- `projects/manifest.json` 및 `projects/` 아래 생성 페이지와 사진은 관리자가 관리합니다. 기존 sitemap 항목은 유지하고 시공 사례 URL만 자동 갱신합니다.
+- 운영자 토큰의 실제 등록/수정/삭제 검증은 운영자가 테스트용 비민감 사진으로 수행해야 합니다. GitHub Pages 용량 및 사용 정책을 준수하세요.
