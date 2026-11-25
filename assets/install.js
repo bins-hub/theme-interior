@@ -1,48 +1,48 @@
-(() => {
-  'use strict';
-  let pending = null, installing = false;
-  const button = document.getElementById('themi-native-install');
-  const help = document.getElementById('themi-install-help');
-  const status = document.getElementById('themi-install-status');
-  const links = document.querySelectorAll('[data-themi-install]');
-  const standalone = () => window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
-  function refresh() {
-    button.hidden = !pending || standalone();
-    button.disabled = installing;
-  }
-  function guide(message) {
-    help.open = true;
-    status.textContent = message;
-    document.getElementById('install-guide').scrollIntoView({block:'start'});
-  }
-  window.addEventListener('beforeinstallprompt', event => {
-    event.preventDefault();
-    pending = event;
-    refresh();
-  });
-  window.addEventListener('appinstalled', () => {
-    pending = null;
-    refresh();
-    status.textContent = '설치가 완료되었습니다. 기기의 앱 목록 또는 홈 화면에서 확인하세요.';
-  });
-  async function requestInstall(event) {
-    event.preventDefault();
-    if (installing) return;
-    if (standalone()) { guide('현재 앱으로 실행 중입니다.'); return; }
-    if (!pending) { guide('아래에서 사용 중인 기기의 설치 방법을 확인하세요.'); return; }
-    const promptEvent = pending;
-    pending = null;
-    installing = true;
-    refresh();
-    try {
-      await promptEvent.prompt();
-      const choice = await promptEvent.userChoice;
-      if (choice.outcome === 'accepted') guide('설치를 승인했습니다. 브라우저의 설치 완료 안내를 확인하세요.');
-      else guide('설치가 취소되었습니다. 다시 설치하려면 아래 방법을 이용하세요.');
-    } catch { guide('자동 설치 창을 열 수 없습니다. 아래 방법을 이용하세요.'); }
-    finally { installing = false; refresh(); }
-  }
-  links.forEach(link => link.addEventListener('click', requestInstall));
-  button.addEventListener('click', requestInstall);
-  refresh();
+/* JAPULSE-style opt-in PWA installation for TheMi. No automatic prompt or marketing overlay. */
+(function(){
+"use strict";
+if(!window.isSecureContext)return;
+const standalone=()=>window.matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
+if("serviceWorker" in navigator){
+  const register=()=>navigator.serviceWorker.register("/sw.js",{scope:"/",updateViaCache:"none"}).catch(()=>{});
+  if(document.readyState==="complete")register();else window.addEventListener("load",register,{once:true});
+}
+if(standalone())return;
+const isIOS=/iPad|iPhone|iPod/i.test(navigator.userAgent)||(/Macintosh/i.test(navigator.userAgent)&&navigator.maxTouchPoints>1);
+const isAndroid=/Android/i.test(navigator.userAgent);
+let deferred=null,button=null,close=null,panel=null,busy=false,dismissed=false;
+try{dismissed=Number(localStorage.getItem("themi.pwa.dismissUntil")||0)>Date.now();}catch(e){}
+function closePanel(){if(panel){panel.remove();panel=null;}}
+function removeButton(){closePanel();button?.remove();close?.remove();button=null;close=null;}
+function dismiss(){dismissed=true;try{localStorage.setItem("themi.pwa.dismissUntil",String(Date.now()+7*86400000));}catch(e){}removeButton();}
+function showHelp(message){
+  closePanel();
+  panel=document.createElement("section");panel.className="themi-pwa-panel";panel.setAttribute("role","dialog");panel.setAttribute("aria-label","디자인더미 앱 설치 안내");
+  const title=document.createElement("h2");title.textContent="디자인더미 앱 설치";
+  const p=document.createElement("p");p.textContent=message||(isIOS?"Safari 공유 버튼 → 홈 화면에 추가 → 추가를 선택하세요. 앱 안에서 열었다면 Safari에서 다시 접속하세요.":isAndroid?"Chrome 오른쪽 위 ⋮ → 앱 설치 또는 홈 화면에 추가를 선택하세요.":"Chrome 오른쪽 위 ⋮ → 캐스팅, 저장, 공유 → 페이지를 앱으로 설치 또는 바로가기 만들기. Edge는 … → 앱 → 이 사이트를 앱으로 설치. 바탕화면 바로가기 옵션을 선택하세요.");
+  const end=document.createElement("button");end.type="button";end.textContent="닫기";end.addEventListener("click",()=>{closePanel();button?.focus();});
+  panel.append(title,p,end);document.body.append(panel);end.focus();
+}
+async function installNow(){
+  if(busy)return;
+  if(standalone()){removeButton();return;}
+  if(!deferred){showHelp();return;}
+  const evt=deferred;deferred=null;busy=true;if(button)button.disabled=true;
+  try{
+    await evt.prompt();const choice=await evt.userChoice;
+    if(choice.outcome==="accepted"){removeButton();}
+    else showHelp("설치가 취소되었습니다. 브라우저 메뉴에서 다시 설치할 수 있습니다.");
+  }catch(e){showHelp();}
+  finally{busy=false;if(button)button.disabled=false;}
+}
+function ensureButton(){
+  if(button||standalone()||dismissed)return;
+  button=document.createElement("button");button.type="button";button.className="themi-pwa-cta";button.textContent="↧  디자인더미 앱 설치";button.addEventListener("click",installNow);
+  close=document.createElement("button");close.type="button";close.className="themi-pwa-close";close.textContent="×";close.setAttribute("aria-label","설치 안내 7일간 숨기기");close.addEventListener("click",dismiss);
+  document.body.append(button,close);
+}
+window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferred=e;ensureButton();});
+window.addEventListener("appinstalled",()=>{deferred=null;removeButton();});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&panel){closePanel();button?.focus();}});
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",ensureButton,{once:true});else ensureButton();
 })();
